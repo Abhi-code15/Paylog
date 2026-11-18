@@ -14,6 +14,9 @@
     "test": "node --test tests/unit/*.test.js tests/integration/*.test.js"
   },
   "dependencies": {
+    "@neon/config": "^1.14.3",
+    "@neon/env": "^2.1.6",
+    "@neondatabase/serverless": "^1.2.1",
     "@tailwindcss/vite": "^4.0.0",
     "bcryptjs": "^3.0.2",
     "canvas-confetti": "^1.9.4",
@@ -31,7 +34,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.0",
-    "vite": "^6.1.0"
+    "vite": "^6.1.0",
+    "ws": "^8.23.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4"

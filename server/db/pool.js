@@ -1,15 +1,70 @@
 import pg from 'pg';
+import dns from 'dns/promises';
 import { config } from '../config.js';
 
 const { Pool } = pg;
 
-export const pool = new Pool({
-  connectionString: config.database.url,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
-  ssl: config.isProduction ? { rejectUnauthorized: false } : undefined,
-});
+export async function buildPoolConfig(rawUrl) {
+  if (!rawUrl) return {};
+  try {
+    const parsed = new URL(rawUrl);
+    const isRemote =
+      parsed.hostname.includes('.render.com') ||
+      parsed.hostname.includes('neon.tech') ||
+      parsed.hostname.includes('supabase.co') ||
+      parsed.hostname.includes('aws.com') ||
+      config.isProduction;
+    const isLocal = parsed.hostname.includes('127.0.0.1') || parsed.hostname.includes('localhost');
+
+    let host = parsed.hostname;
+    // On systems where local DNS resolver appends root-server entries (e.g. Windows Node happy eyeballs),
+    // resolve to first IPv4 address directly while preserving SNI servername for TLS.
+    if (isRemote && !isLocal && parsed.hostname.includes('neon.tech')) {
+      try {
+        const addresses = await dns.resolve4(parsed.hostname);
+        if (addresses && addresses.length > 0) {
+          host = addresses[0];
+        }
+      } catch (dnsErr) {
+        // Fall back to original hostname
+      }
+    }
+
+    if (isRemote && !isLocal) {
+      return {
+        host,
+        port: parseInt(parsed.port || '5432', 10),
+        user: decodeURIComponent(parsed.username),
+        password: decodeURIComponent(parsed.password),
+        database: decodeURIComponent(parsed.pathname.replace(/^\//, '')),
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 15000,
+        ssl: {
+          rejectUnauthorized: false,
+          servername: parsed.hostname,
+        },
+      };
+    }
+  } catch (err) {
+    // Fall back to connectionString
+  }
+
+  return {
+    connectionString: rawUrl,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
+  };
+}
+
+const poolConfig = await buildPoolConfig(config.database.url);
+export const pool = new Pool(poolConfig);
+
+export async function createDirectPool() {
+  const directConfig = await buildPoolConfig(config.database.unpooledUrl || config.database.url);
+  return new Pool(directConfig);
+}
 
 pool.on('error', (err) => {
   console.error('[PostgreSQL Pool Unexpected Error]:', err);

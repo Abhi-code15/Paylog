@@ -18,6 +18,23 @@ function getSessionSecret() {
   return secret || 'dev-session-secret-paylog-local-development-only-2026-min-32-chars';
 }
 
+function getDatabaseUrl() {
+  const rawUrl = process.env.DATABASE_URL?.trim() || 'postgresql://postgres@127.0.0.1:5433/paylog';
+  try {
+    const parsed = new URL(rawUrl);
+    // Auto-fix Render internal hostnames when cross-region resolution fails:
+    // If a bare Render internal hostname like dpg-xxxxxxxx-a is passed without a domain suffix,
+    // append the Virginia cluster domain where this database is hosted.
+    if (parsed.hostname && parsed.hostname.startsWith('dpg-') && !parsed.hostname.includes('.')) {
+      parsed.hostname = `${parsed.hostname}.virginia-postgres.render.com`;
+      return parsed.toString();
+    }
+  } catch (e) {
+    // If not a parseable URL, return raw
+  }
+  return rawUrl;
+}
+
 export const config = {
   env,
   isProduction,
@@ -29,7 +46,12 @@ export const config = {
     maxAgeMs: 7 * 24 * 60 * 60 * 1000, // 7 days
   },
   database: {
-    url: process.env.DATABASE_URL || 'postgresql://postgres@127.0.0.1:5433/paylog',
+    url: getDatabaseUrl(),
+    unpooledUrl: process.env.DATABASE_URL_UNPOOLED?.trim() || getDatabaseUrl(),
+  },
+  neon: {
+    branch: process.env.NEON_BRANCH || 'production',
+    branchId: process.env.NEON_BRANCH_ID || '',
   },
   demo: {
     allowDemoMode: !isProduction || process.env.ALLOW_DEMO_MODE === 'true',
