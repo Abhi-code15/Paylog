@@ -21,21 +21,28 @@ describe('Payment Service - Unit Tests', () => {
   });
 
   describe('buildUpiUri', () => {
-    it('generates standard RFC compliant upi://pay URI without am parameter (anti-fraud bypass)', () => {
+    it('generates standard RFC compliant upi://pay URI without am or tn parameters (anti-fraud bypass)', () => {
       const uri = buildUpiUri({
         upiId: 'merchant@okhdfcbank',
         name: 'Fresh Supermarket',
-        amountPaise: 45000,
-        note: 'Weekly Fruits',
+        merchantCode: '5411',
       });
 
       assert.match(uri, /^upi:\/\/pay\?/);
       assert.match(uri, /pa=merchant%40okhdfcbank/);
       assert.match(uri, /pn=Fresh\+Supermarket/);
-      assert.match(uri, /cu=INR/);
-      assert.match(uri, /tn=Weekly\+Fruits/);
-      // 'am' must not be in the query string to prevent anti-fraud blocks in Paytm/GPay/PhonePe
+      assert.match(uri, /mc=5411/);
+      // 'am' and 'tn' must not be in the query string to prevent anti-fraud blocks in Paytm/GPay/PhonePe
       assert.equal(/am=/.test(uri), false, 'UPI URI must omit the am parameter to bypass anti-fraud blocks');
+      assert.equal(/tn=/.test(uri), false, 'UPI URI must omit the tn parameter to bypass anti-fraud blocks');
+    });
+
+    it('generates minimal URI with only pa when name and merchantCode are omitted', () => {
+      const uri = buildUpiUri({
+        upiId: 'user@okhdfcbank',
+      });
+
+      assert.equal(uri, 'upi://pay?pa=user%40okhdfcbank');
     });
   });
 

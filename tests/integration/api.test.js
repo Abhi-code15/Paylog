@@ -154,6 +154,8 @@ describe('Paylog API Integration Tests', () => {
     const createData = await createRes.json();
     assert.equal(createData.paymentAttempt.amountPaise, 50000);
     assert.ok(createData.upiUri.startsWith('upi://pay?'));
+    assert.equal(/am=/.test(createData.upiUri), false);
+    assert.equal(/tn=/.test(createData.upiUri), false);
 
     const attemptId = createData.paymentAttempt.id;
 

@@ -23,7 +23,7 @@ flowchart TD
 
     %% Personal Spending Flow
     Choice -->|"Track Personal Expense"| Personal["1. Enter Expense or Scan UPI QR"]
-    Personal --> UpiLink["2. Paylog generates Anti-Fraud UPI Link<br/>(Leaves amount blank to stop app blocks)"]
+    Personal --> UpiLink["2. Paylog generates Anti-Fraud UPI Link<br/>(Sends only pa & pn to stop risk blocks)"]
     UpiLink --> UpiApp["3. Opens your UPI App<br/>(GPay / PhonePe / Paytm)"]
     UpiApp --> Confirm["4. You type amount & pay in your UPI app"]
     Confirm --> Ledger["5. Paylog saves it in PostgreSQL<br/>(Saved in exact paise, zero math errors)"]
@@ -41,7 +41,7 @@ flowchart TD
 ## ✨ Key Features
 
 - **Exact Math (Zero Float Errors):** All money is calculated in integer **Paise** (₹1 = 100 paise). You will never lose even 1 paisa to computer rounding bugs.
-- **Smart Anti-Fraud UPI Links:** When creating UPI payment links, Paylog leaves out the `am` (amount) parameter. This stops apps like Paytm and PhonePe from flagging or blocking the payment. You type the amount safely inside your UPI app.
+- **Smart Anti-Fraud UPI Links:** When creating UPI payment links, Paylog sends only essential non-blocking parameters (`pa`, `pn`, and optional `mc`), leaving out `am` (amount) and `tn` (description). This stops apps like Paytm, PhonePe, and GPay from flagging or blocking the payment. You type the amount safely inside your UPI app.
 - **Easy Bill Splitting:** Split group expenses equally with friends or flatmates. Remainder paise are shared fairly and automatically.
 - **Debt Simplification:** If person A owes B, and B owes C, Paylog calculates a shortcut so A can pay C directly.
 - **Pure Dark & Light Mode:** Sleek, true OLED black dark theme (no ugly blue tint) and clean, responsive design that works on mobile phones and computers.

@@ -17,16 +17,18 @@ export function validateUpiId(upiId) {
 }
 
 /**
- * Generates an RFC-compliant, standard NPCI UPI URI.
+ * Generates an RFC-compliant, minimal NPCI UPI URI with only non-blocking parameters.
  * Note: To bypass strict anti-fraud risk policies in UPI apps (Paytm, PhonePe, GPay)
- * that block third-party web intent requests with pre-filled amounts, the `am` (amount)
- * parameter is intentionally omitted from the generated URI. The payee details (pa, pn, tn)
- * are populated, and the user enters the amount directly inside their UPI app.
+ * that block third-party web intent requests with pre-filled amounts and automated descriptions:
+ * - 'am' (amount) is completely omitted.
+ * - 'tn' (transaction note/description) is completely omitted.
+ * Only payee UPI ID ('pa'), payee name ('pn'), and merchant code ('mc' if present) are included.
+ * The user manually inputs the amount and description in their UPI app.
  *
- * @param {{ upiId: string, name?: string, amountPaise?: number, note?: string }} params
+ * @param {{ upiId: string, name?: string, merchantCode?: string }} params
  * @returns {string} upi://pay?... URI
  */
-export function buildUpiUri({ upiId, name = '', amountPaise = null, note = '' }) {
+export function buildUpiUri({ upiId, name = '', merchantCode = '' }) {
   if (!validateUpiId(upiId)) {
     throw new Error('Invalid UPI ID format');
   }
@@ -37,12 +39,10 @@ export function buildUpiUri({ upiId, name = '', amountPaise = null, note = '' })
   if (name && name.trim()) {
     queryParams.set('pn', name.trim().slice(0, 100));
   }
-  queryParams.set('cu', 'INR');
-  if (note && note.trim()) {
-    queryParams.set('tn', note.trim().slice(0, 150));
+  if (merchantCode && merchantCode.trim()) {
+    queryParams.set('mc', merchantCode.trim().slice(0, 30));
   }
 
-  // Notice: 'am' is intentionally omitted to avoid UPI app anti-fraud risk blocks.
   return `upi://pay?${queryParams.toString()}`;
 }
 
@@ -96,9 +96,10 @@ export function parseUpiQr(rawString) {
     const pn = params.get('pn')?.trim() || null;
     const am = params.get('am')?.trim() || null;
     const tn = params.get('tn')?.trim() || null;
+    const mc = params.get('mc')?.trim() || null;
 
     if (!pa || !validateUpiId(pa)) {
-      return { upiId: null, name: null, amountPaise: null, note: null, isValid: false, error: 'QR contains invalid or missing UPI ID' };
+      return { upiId: null, name: null, amountPaise: null, note: null, merchantCode: null, isValid: false, error: 'QR contains invalid or missing UPI ID' };
     }
 
     let amountPaise = null;
@@ -114,6 +115,7 @@ export function parseUpiQr(rawString) {
       name: pn,
       amountPaise,
       note: tn,
+      merchantCode: mc,
       isValid: true,
     };
   } catch (err) {

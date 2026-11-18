@@ -109,7 +109,7 @@ export function LandingPage() {
   };
 
   const handleCopyUpi = () => {
-    navigator.clipboard?.writeText('upi://pay?pa=abhishek@okhdfcbank&pn=Abhishek%20Tiwari&tn=Dinner%20Split&cu=INR');
+    navigator.clipboard?.writeText('upi://pay?pa=abhishek@okhdfcbank&pn=Abhishek%20Tiwari');
     setCopiedUpi(true);
     setTimeout(() => setCopiedUpi(false), 2000);
   };
@@ -448,19 +448,19 @@ export function LandingPage() {
                       <span className="font-semibold text-slate-900 dark:text-white">Abhishek Tiwari</span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-slate-500 dark:text-zinc-400">Transaction Note:</span>
-                      <span className="font-mono text-slate-700 dark:text-zinc-300">Dinner Split</span>
+                      <span className="text-slate-500 dark:text-zinc-400">Allowed Query Parameters:</span>
+                      <span className="font-mono text-slate-700 dark:text-zinc-300">pa & pn only</span>
                     </div>
                     <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200/60 dark:border-zinc-800/60">
-                      <span className="text-slate-500 dark:text-zinc-400">Amount Parameter (am):</span>
+                      <span className="text-slate-500 dark:text-zinc-400">Blocked Risk Parameters:</span>
                       <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-[11px] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">
-                        OMITTED (Anti-Fraud Safe)
+                        am & tn OMITTED (Anti-Fraud Safe)
                       </span>
                     </div>
                   </div>
 
                   <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-[#111114] border border-slate-200/80 dark:border-zinc-800 text-[11px] font-mono text-slate-600 dark:text-zinc-400 break-all select-all">
-                    upi://pay?pa=abhishek@okhdfcbank&pn=Abhishek%20Tiwari&tn=Dinner%20Split&cu=INR
+                    upi://pay?pa=abhishek@okhdfcbank&pn=Abhishek%20Tiwari
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -482,7 +482,7 @@ export function LandingPage() {
                   </div>
 
                   <p className="text-[10px] text-slate-500 dark:text-zinc-500 leading-normal">
-                    * By omitting <code className="text-blue-500">am=</code>, Paytm and PhonePe security risk engines allow payments without blocking browser deep-links. Users confirm amount directly inside the app.
+                    * Stripping <code className="text-blue-500">am=</code> and <code className="text-blue-500">tn=</code> avoids third-party anti-fraud risk policy blocks in Paytm, PhonePe, and GPay. Enter the amount directly in your UPI app.
                   </p>
                 </div>
               )}
@@ -490,83 +490,6 @@ export function LandingPage() {
             </div>
           </div>
 
-        </div>
-
-        {/* ─── Feature Highlights Section (Fintech Architecture Pillars) ─────── */}
-        <div className="mt-12 sm:mt-16 pt-10 border-t border-slate-200/80 dark:border-zinc-800/80">
-          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-900/40 mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Core Financial Engine</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-              Engineered for the Indian Financial Ecosystem
-            </h2>
-            <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed max-w-xl mx-auto">
-              Built with relational integrity, integer ledger precision, and zero floating-point discrepancies.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
-            
-            {/* Feature 1 */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-xs hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.8)] hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40 flex items-center justify-center font-bold mb-4 shadow-xs">
-                  <Receipt className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  0.00% Float Drift
-                </h3>
-                <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
-                  Every transaction is stored as an integer quantity in Paise (₹1.00 = 100 paise). Eliminates cumulative IEEE 754 float rounding errors across monthly summaries.
-                </p>
-              </div>
-              <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-zinc-400">
-                <span>Integer Precision</span>
-                <span className="font-bold text-blue-600 dark:text-blue-400">100 paise = ₹1</span>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-xs hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.8)] hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/40 flex items-center justify-center font-bold mb-4 shadow-xs">
-                  <Shield className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  Anti-Fraud UPI Assistant
-                </h3>
-                <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
-                  Safely opens official UPI apps (GPay, PhonePe, Paytm) without the <code className="px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 font-mono text-[11px] font-bold">am=</code> trigger that sets off third-party fraud risk flags.
-                </p>
-              </div>
-              <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-zinc-400">
-                <span>Risk Policy</span>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400">Pass-Through</span>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="p-6 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-xs hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.8)] hover:border-purple-500/30 dark:hover:border-purple-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900/40 flex items-center justify-center font-bold mb-4 shadow-xs">
-                  <Users className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  Transitive Balance Simplification
-                </h3>
-                <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
-                  Automatically condenses circular group debts into direct settlements. If A owes B and B owes C, Paylog lets A settle directly with C in one transaction.
-                </p>
-              </div>
-              <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-zinc-400">
-                <span>Algorithm</span>
-                <span className="font-bold text-purple-600 dark:text-purple-400">Minimal Flow</span>
-              </div>
-            </div>
-
-          </div>
         </div>
 
       </main>

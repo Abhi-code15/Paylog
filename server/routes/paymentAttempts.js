@@ -19,6 +19,7 @@ paymentAttemptsRouter.post('/', async (req, res, next) => {
       recipientUpiId,
       recipientName,
       note,
+      merchantCode,
       paymentPath = 'upi_intent',
       idempotencyKey,
     } = req.body;
@@ -49,8 +50,7 @@ paymentAttemptsRouter.post('/', async (req, res, next) => {
       const uri = buildUpiUri({
         upiId: existingAttempt.recipient_upi_id,
         name: existingAttempt.recipient_name,
-        amountPaise: Number(existingAttempt.amount_paise),
-        note: existingAttempt.note,
+        merchantCode: merchantCode || '',
       });
 
       return res.status(200).json({
@@ -92,8 +92,7 @@ paymentAttemptsRouter.post('/', async (req, res, next) => {
     const upiUri = buildUpiUri({
       upiId: row.recipient_upi_id,
       name: row.recipient_name,
-      amountPaise: Number(row.amount_paise),
-      note: row.note,
+      merchantCode: merchantCode || '',
     });
 
     res.status(201).json({
@@ -329,8 +328,7 @@ paymentAttemptsRouter.post('/:id/retry', async (req, res, next) => {
     const upiUri = buildUpiUri({
       upiId: row.recipient_upi_id,
       name: row.recipient_name,
-      amountPaise: Number(row.amount_paise),
-      note: row.note,
+      merchantCode: merchantCode || '',
     });
 
     res.status(201).json({
