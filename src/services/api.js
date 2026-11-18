@@ -44,6 +44,7 @@ export const api = {
     me: () => request('/api/auth/me'),
     login: (email, password) => request('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
     register: (name, email, password) => request('/api/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password }) }),
+    google: (credentialPayload) => request('/api/auth/google', { method: 'POST', body: JSON.stringify(credentialPayload) }),
     logout: () => request('/api/auth/logout', { method: 'POST' }),
     demo: () => request('/api/auth/demo', { method: 'POST' }),
   },

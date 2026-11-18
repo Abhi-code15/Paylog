@@ -1,117 +1,138 @@
 # Paylog — Pay it. Log it. Done.
 
-[![Tests](https://img.shields.io/badge/tests-34%20passed-emerald)](./docs/07-test-plan.md)
-[![Database](https://img.shields.io/badge/database-PostgreSQL%2018-blue)](./docs/04-data-model.md)
+[![Tests](https://img.shields.io/badge/tests-35%20passed-emerald)](./tests/)
+[![Database](https://img.shields.io/badge/database-PostgreSQL%2018-blue)](./server/db/)
 [![Language](https://img.shields.io/badge/language-JavaScript%20(Pure)-yellow)](./package.json)
 [![License](https://img.shields.io/badge/license-MIT-slate)](./LICENSE)
 
-**Paylog** is a personal-finance and shared-expense application engineered to eliminate the manual friction of tracking everyday transactions. Built specifically for the Indian financial ecosystem (INR ₹), Paylog bridges two core pillars:
+**Paylog** is an easy-to-use personal finance tracker and shared-expense manager built for India (INR ₹).
 
-1. **Personal Transactions with UPI-Assisted Recording:** Enter an expense, scan a standard merchant UPI QR code or enter a UPI ID, review payee details, launch an installed UPI application (GPay, PhonePe, Paytm, BHIM) via standard deep link, and report the outcome (`Successful`, `Failed`, or `Pending`) upon returning.
-2. **Splitwise-Style Shared Expenses & Groups:** Create groups with registered friends or offline manual participants, split shared bills equally with deterministic integer-paise remainder distribution, compute viewer-centric net balances ("You are owed ₹X" / "You owe ₹Y"), simplify multi-party debts into minimal settlements, and export/share summaries.
+It helps you track your daily spending, manage monthly budgets, and split group bills with friends — without complicated math or rounding errors.
 
----
-
-## 1. Key Highlights & Technical Principles
-
-- **100% Pure JavaScript:** Built strictly in JavaScript & JSX (`.js`, `.jsx`). Zero TypeScript toolchains or `.ts`/`.tsx` files.
-- **PostgreSQL Single Source of Truth:** All transactions, budgets, groups, member allocations, and payment attempts are persisted strictly in PostgreSQL using parameterized queries and versioned migrations. Zero JSON-file, in-memory, or SQLite fallbacks.
-- **Integer Paise Money Arithmetic:** All monetary amounts are stored and calculated in integer Paise ($1\text{ INR} = 100\text{ Paise}$). Remainder paise during equal splits are deterministically allocated. Total shares always equal the total expense down to the exact paisa.
-- **Idempotent UPI Lifecycle:** Payment attempts are persisted before external app handoff. Reporting outcomes is idempotent, preventing duplicate ledger entries.
-- **Dedicated Profile & Settings:** Configure user display name, read-only email, optional UPI ID, and persistent monthly budget.
-- **Safe CSV Export:** Streams sanitized CSVs escaping spreadsheet formula characters (`=`, `+`, `-`, `@`) to prevent CSV injection.
-- **Clean UI & Theme:** Responsive on desktop and mobile (pinned bottom navigation), supporting light and dark modes.
+Created with ❤️ by **Abhishek Tiwari**.
 
 ---
 
-## 2. Tech Stack
+## 🚀 How It Works
 
-| Layer | Technology | Role |
+Here is a simple flow diagram showing how Paylog works:
+
+```mermaid
+flowchart TD
+    User["👤 You (User)"] --> Choice{"What do you want to do?"}
+
+    %% Personal Spending Flow
+    Choice -->|"Track Personal Expense"| Personal["1. Enter Expense or Scan UPI QR"]
+    Personal --> UpiLink["2. Paylog generates Anti-Fraud UPI Link<br/>(Leaves amount blank to stop app blocks)"]
+    UpiLink --> UpiApp["3. Opens your UPI App<br/>(GPay / PhonePe / Paytm)"]
+    UpiApp --> Confirm["4. You type amount & pay in your UPI app"]
+    Confirm --> Ledger["5. Paylog saves it in PostgreSQL<br/>(Saved in exact paise, zero math errors)"]
+
+    %% Shared Expenses Flow
+    Choice -->|"Split Bill with Friends"| Group["1. Create a Group & Add Friends"]
+    Group --> AddBill["2. Add a Shared Bill (e.g. ₹8,400 Trip)"]
+    AddBill --> Math["3. Exact Integer Split<br/>(Everyone gets fair share down to 1 paisa)"]
+    Math --> Simplify["4. Debt Simplification<br/>(Simplifies who pays who in fewest steps)"]
+    Simplify --> Settle["5. Settle balances directly via UPI"]
+```
+
+---
+
+## ✨ Key Features
+
+- **Exact Math (Zero Float Errors):** All money is calculated in integer **Paise** (₹1 = 100 paise). You will never lose even 1 paisa to computer rounding bugs.
+- **Smart Anti-Fraud UPI Links:** When creating UPI payment links, Paylog leaves out the `am` (amount) parameter. This stops apps like Paytm and PhonePe from flagging or blocking the payment. You type the amount safely inside your UPI app.
+- **Easy Bill Splitting:** Split group expenses equally with friends or flatmates. Remainder paise are shared fairly and automatically.
+- **Debt Simplification:** If person A owes B, and B owes C, Paylog calculates a shortcut so A can pay C directly.
+- **Pure Dark & Light Mode:** Sleek, true OLED black dark theme (no ugly blue tint) and clean, responsive design that works on mobile phones and computers.
+- **Interactive Landing Page:** Try out the bill-split simulator and smart UPI generator live directly on the home page before signing up.
+- **Google Sign-In & Email Login:** Quick access with Google authentication or standard email login.
+- **Safe CSV Exports:** Download your expense history anytime in CSV format, safely protected against spreadsheet formula tricks.
+- **PostgreSQL Database:** Reliable and secure data storage backed by relational PostgreSQL.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology | Description |
 | :--- | :--- | :--- |
-| **Frontend** | React 19 + Vite | JavaScript / JSX client with responsive layout |
-| **Styling** | Tailwind CSS v4 | Clean, professional UI matching Paylog's blue/navy identity |
-| **Backend** | Node.js + Express | RESTful API with centralized error handling |
-| **Database** | PostgreSQL 18 | Relational database with foreign keys & check constraints |
-| **DB Driver** | `pg` (node-postgres) | Connection pool with parameterized SQL queries |
-| **Sessions** | `express-session` + `connect-pg-simple` | Secure, HttpOnly cookie sessions stored in PostgreSQL |
-| **Security** | `helmet`, `bcryptjs`, `express-rate-limit` | Password hashing, security headers, rate limiting |
-| **Test Runner**| Node.js native test runner (`node:test`) | Unit tests and live API integration tests |
+| **Frontend** | React 19 + Vite | Fast, modern client app built with pure JavaScript & JSX |
+| **Styling** | Tailwind CSS v4 | Clean UI with true black dark mode and mobile-ready layouts |
+| **Icons** | Lucide React | Lightweight and modern UI icons |
+| **Backend** | Node.js + Express | REST API with clean error handling and session management |
+| **Database** | PostgreSQL | Relational database with strict integer paise storage |
+| **Testing** | Node.js Native Runner | 35 automated unit and integration tests |
 
 ---
 
-## 3. Quick Start & Local Setup
+## 🏁 Quick Start & Setup
 
 ### Prerequisites
-- **Node.js:** v20.x, v22.x, or v24.x (`node -v`)
-- **PostgreSQL:** Running PostgreSQL instance (`psql --version`)
+- [Node.js](https://nodejs.org/) (version 20 or higher)
+- [PostgreSQL](https://www.postgresql.org/) (running locally or remotely)
 
-### Installation & Database Initialization
+### Step-by-Step Guide
 
-1. **Clone and enter the workspace:**
+1. **Clone the repository:**
    ```bash
-   cd PayLog
+   git clone https://github.com/Abhi-code15/Paylog.git
+   cd Paylog
    ```
 
-2. **Configure Environment Variables:**
-   Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-   Ensure `DATABASE_URL` points to your PostgreSQL instance (e.g. `postgresql://postgres:postgres@localhost:5432/paylog`).
-
-3. **Install Dependencies:**
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-4. **Run Database Migrations:**
-   Executes idempotent SQL migrations in `server/db/migrations/`:
+3. **Configure environment settings:**
+   Copy the example `.env` file:
+   ```bash
+   cp .env.example .env
+   ```
+   Set your database connection URL inside `.env`:
+   ```env
+   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/paylog
+   PORT=3000
+   ```
+
+4. **Run database migrations:**
    ```bash
    npm run migrate
    ```
 
-5. **(Optional) Seed Isolated Fictional Demo Data:**
+5. **(Optional) Add sample demo data:**
    ```bash
    npm run seed
    ```
 
-6. **Run Automated Test Suite:**
-   Executes 34 domain unit tests and integration tests against PostgreSQL:
+6. **Run tests:**
    ```bash
    npm test
    ```
+   *(All 35 tests should pass)*
 
-7. **Start Development Server:**
+7. **Start the local server:**
    ```bash
    npm run dev
    ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-8. **Build for Production:**
-   ```bash
-   npm run build
-   npm start
-   ```
+   Open **http://localhost:3000** in your web browser!
 
 ---
 
-## 4. Documentation Index
+## 📄 Project Documentation
 
-Comprehensive documentation is maintained in the `docs/` directory:
-
-1. [01-product-research.md](./docs/01-product-research.md) — Current-state codebase audit, problem statement, benchmarks, and risk analysis.
-2. [02-users-and-journeys.md](./docs/02-users-and-journeys.md) — User types, permissions matrix, and step-by-step user journeys.
-3. [03-PRD.md](./docs/03-PRD.md) — Product requirements document, acceptance criteria, and feature scopes.
-4. [04-data-model.md](./docs/04-data-model.md) — Entity-relationship diagram, table schemas, and integer paise money rules.
-5. [05-api-contract.md](./docs/05-api-contract.md) — REST API endpoint schemas, request/response bodies, and error formats.
-6. [06-security-review.md](./docs/06-security-review.md) — Threat model, IDOR protection, session security, and formula injection mitigations.
-7. [07-test-plan.md](./docs/07-test-plan.md) — Test plan, test cases, and test execution report (34 passing tests).
-8. [08-operations-and-deployment.md](./docs/08-operations-and-deployment.md) — Deployment instructions, Docker containerization, and backup/restore procedures.
+For deeper technical details, explore the `docs/` folder:
+- [01-product-research.md](./docs/01-product-research.md) — Research and goals
+- [02-users-and-journeys.md](./docs/02-users-and-journeys.md) — User flows and permissions
+- [03-PRD.md](./docs/03-PRD.md) — Product requirements document
+- [04-data-model.md](./docs/04-data-model.md) — Database schema & paise math rules
+- [05-api-contract.md](./docs/05-api-contract.md) — API endpoints & request formats
+- [06-security-review.md](./docs/06-security-review.md) — Security safeguards
+- [07-test-plan.md](./docs/07-test-plan.md) — Test cases & test coverage
+- [08-operations-and-deployment.md](./docs/08-operations-and-deployment.md) — Deployment & production setup
 
 ---
 
-## 5. Known Limitations & Roadmap
+## 📝 License
 
-- **UPI Verification:** Payment outcomes are user-reported. Paylog does not act as a payment gateway or connect to bank APIs.
-- **Splitting Methods:** Equal splitting with remainder paise distribution is fully supported in MVP. Custom percentage/share splitting is ready in database schema and planned for future release.
-- **Offline Members:** Offline manual participants are group-scoped participant records and do not receive login access or automated SMS/WhatsApp alerts.
+This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details.

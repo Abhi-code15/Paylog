@@ -18,30 +18,31 @@ export function validateUpiId(upiId) {
 
 /**
  * Generates an RFC-compliant, standard NPCI UPI URI.
- * @param {{ upiId: string, name?: string, amountPaise: number, note?: string }} params
+ * Note: To bypass strict anti-fraud risk policies in UPI apps (Paytm, PhonePe, GPay)
+ * that block third-party web intent requests with pre-filled amounts, the `am` (amount)
+ * parameter is intentionally omitted from the generated URI. The payee details (pa, pn, tn)
+ * are populated, and the user enters the amount directly inside their UPI app.
+ *
+ * @param {{ upiId: string, name?: string, amountPaise?: number, note?: string }} params
  * @returns {string} upi://pay?... URI
  */
-export function buildUpiUri({ upiId, name = '', amountPaise, note = '' }) {
+export function buildUpiUri({ upiId, name = '', amountPaise = null, note = '' }) {
   if (!validateUpiId(upiId)) {
     throw new Error('Invalid UPI ID format');
   }
-  if (!Number.isInteger(amountPaise) || amountPaise <= 0) {
-    throw new Error('Amount must be a positive integer in paise');
-  }
 
-  const rupeesStr = (amountPaise / 100).toFixed(2);
   const queryParams = new URLSearchParams();
 
   queryParams.set('pa', upiId.trim());
   if (name && name.trim()) {
     queryParams.set('pn', name.trim().slice(0, 100));
   }
-  queryParams.set('am', rupeesStr);
   queryParams.set('cu', 'INR');
   if (note && note.trim()) {
     queryParams.set('tn', note.trim().slice(0, 150));
   }
 
+  // Notice: 'am' is intentionally omitted to avoid UPI app anti-fraud risk blocks.
   return `upi://pay?${queryParams.toString()}`;
 }
 

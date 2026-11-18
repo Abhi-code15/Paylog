@@ -59,17 +59,17 @@ export function App() {
   // Loading / Splash Screen
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-black p-4 transition-colors">
         <div className="flex flex-col items-center gap-4 text-center">
           <AppLogo className="h-12" textClassName="text-3xl" />
-          <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm font-medium mt-2">
+          <div className="flex items-center gap-2 text-slate-500 dark:text-zinc-400 text-sm font-medium mt-2">
             <RefreshCw className="w-4 h-4 animate-spin text-blue-600 dark:text-blue-400" />
             <span>Loading Paylog...</span>
           </div>
 
           {splashTimeout && (
-            <div className="mt-6 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm max-w-xs animate-in fade-in">
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-3">
+            <div className="mt-6 p-4 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200 dark:border-zinc-800 shadow-sm max-w-xs animate-in fade-in">
+              <p className="text-xs text-slate-600 dark:text-zinc-400 mb-3">
                 Loading is taking longer than usual. You can retry connecting to the server.
               </p>
               <button
@@ -114,7 +114,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-200">
       {/* Top Navigation */}
       <Navbar
         activeTab={activeTab === 'group_detail' ? 'groups' : activeTab}

@@ -21,7 +21,7 @@ describe('Payment Service - Unit Tests', () => {
   });
 
   describe('buildUpiUri', () => {
-    it('generates standard RFC compliant upi://pay URI', () => {
+    it('generates standard RFC compliant upi://pay URI without am parameter (anti-fraud bypass)', () => {
       const uri = buildUpiUri({
         upiId: 'merchant@okhdfcbank',
         name: 'Fresh Supermarket',
@@ -32,9 +32,10 @@ describe('Payment Service - Unit Tests', () => {
       assert.match(uri, /^upi:\/\/pay\?/);
       assert.match(uri, /pa=merchant%40okhdfcbank/);
       assert.match(uri, /pn=Fresh\+Supermarket/);
-      assert.match(uri, /am=450\.00/);
       assert.match(uri, /cu=INR/);
       assert.match(uri, /tn=Weekly\+Fruits/);
+      // 'am' must not be in the query string to prevent anti-fraud blocks in Paytm/GPay/PhonePe
+      assert.equal(/am=/.test(uri), false, 'UPI URI must omit the am parameter to bypass anti-fraud blocks');
     });
   });
 

@@ -15,6 +15,7 @@ import {
   Check,
   AlertCircle,
   HelpCircle,
+  ShieldCheck,
 } from 'lucide-react';
 
 export function AddTransactionModal({ isOpen, onClose, onSuccess, initialType = 'expense' }) {
@@ -476,8 +477,16 @@ export function AddTransactionModal({ isOpen, onClose, onSuccess, initialType = 
                       />
                     </div>
 
+                    {/* Anti-Fraud Protection Guidance Notice */}
+                    <div className="flex items-start gap-2.5 p-3 rounded-xl bg-blue-50/80 dark:bg-blue-950/50 border border-blue-200/80 dark:border-blue-900/60 text-blue-900 dark:text-blue-200 text-xs leading-relaxed">
+                      <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+                      <div>
+                        <span className="font-bold">Anti-Fraud Safeguard:</span> When your UPI app opens, payee details will be ready. Enter the ₹ amount directly in Paytm/PhonePe/GPay to prevent bank policy blocks.
+                      </div>
+                    </div>
+
                     <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Tapping Pay Now opens your installed UPI app (GPay, PhonePe, Paytm). Return here to report the outcome.
+                      Tapping Pay Now opens your installed UPI app. Return here to report the outcome so your Paylog ledger stays updated.
                     </p>
                   </div>
                 )}

@@ -60,6 +60,15 @@ export function AuthProvider({ children }) {
     return data.user;
   };
 
+  const googleLogin = async (credentialPayload) => {
+    const data = await api.auth.google(credentialPayload);
+    setUser(data.user);
+    if (data.user.themePreference) {
+      setTheme(data.user.themePreference);
+    }
+    return data.user;
+  };
+
   const updateProfile = async (profileData) => {
     const data = await api.profile.update(profileData);
     setUser(data.user);
@@ -76,6 +85,7 @@ export function AuthProvider({ children }) {
         loading,
         login,
         register,
+        googleLogin,
         logout,
         demoLogin,
         updateProfile,

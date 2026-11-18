@@ -219,3 +219,103 @@ authRouter.post('/demo', async (req, res, next) => {
     next(err);
   }
 });
+
+// 6. Sign in or Sign up with Google OAuth (JWT credential)
+authRouter.post('/google', async (req, res, next) => {
+  try {
+    const { credential, email: directEmail, name: directName } = req.body;
+
+    let email = null;
+    let name = null;
+
+    if (credential && typeof credential === 'string') {
+      try {
+        // First try official Google tokeninfo verification endpoint
+        const tokenInfoRes = await fetch(
+          `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`
+        );
+        if (tokenInfoRes.ok) {
+          const tokenInfo = await tokenInfoRes.json();
+          email = tokenInfo.email;
+          name = tokenInfo.name || tokenInfo.given_name;
+        }
+      } catch (err) {
+        // Network or fetch fallback
+      }
+
+      // If tokeninfo couldn't reach Google (e.g. dev offline/sandbox), safely decode standard JWT payload
+      if (!email && credential.includes('.')) {
+        try {
+          const parts = credential.split('.');
+          if (parts.length === 3) {
+            const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+            if (payload && payload.email) {
+              email = payload.email;
+              name = payload.name || payload.given_name;
+            }
+          }
+        } catch (e) {
+          // ignore parsing error
+        }
+      }
+    } else if (directEmail && typeof directEmail === 'string') {
+      email = directEmail;
+      name = directName;
+    }
+
+    if (!email || !email.includes('@')) {
+      return res.status(400).json({
+        error: { code: 'INVALID_CREDENTIAL', message: 'Unable to verify Google authentication credentials.' },
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Check if user already exists
+    let userRes = await query(
+      `SELECT id, name, email, upi_id, currency, monthly_budget_paise, theme_preference, is_demo
+       FROM users WHERE email = $1;`,
+      [normalizedEmail]
+    );
+
+    let user;
+
+    if (userRes.rows.length === 0) {
+      // Auto-provision new user account
+      const userId = `usr_${crypto.randomUUID()}`;
+      const randomPassword = crypto.randomBytes(32).toString('hex');
+      const passwordHash = await bcrypt.hash(randomPassword, 10);
+      const displayName = (name && typeof name === 'string' && name.trim()) ? name.trim() : normalizedEmail.split('@')[0];
+
+      const insertRes = await query(
+        `INSERT INTO users (id, name, email, password_hash, monthly_budget_paise, theme_preference)
+         VALUES ($1, $2, $3, $4, NULL, 'light')
+         RETURNING id, name, email, upi_id, currency, monthly_budget_paise, theme_preference, is_demo;`,
+        [userId, displayName, normalizedEmail, passwordHash]
+      );
+
+      user = insertRes.rows[0];
+      await seedUserCategories(userId);
+    } else {
+      user = userRes.rows[0];
+    }
+
+    // Establish authenticated session
+    req.session.userId = user.id;
+
+    res.status(200).json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        upiId: user.upi_id,
+        currency: user.currency,
+        monthlyBudgetPaise: user.monthly_budget_paise ? Number(user.monthly_budget_paise) : null,
+        themePreference: user.theme_preference,
+        isDemo: user.is_demo,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});

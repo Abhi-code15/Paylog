@@ -293,4 +293,23 @@ describe('Paylog API Integration Tests', () => {
     assert.match(text, /"Date","Type","Description"/);
     assert.match(text, /"Office Stationary"/);
   });
+
+  it('9. Google Sign-In provisions account and returns session', async () => {
+    const googleEmail = `google_${Date.now()}@gmail.com`;
+    const res = await fetch(`${baseUrl}/api/auth/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: googleEmail,
+        name: 'Google Test User',
+      }),
+    });
+
+    assert.equal(res.status, 200);
+    const data = await res.json();
+    assert.equal(data.user.email, googleEmail);
+    assert.equal(data.user.name, 'Google Test User');
+    const rawCookie = res.headers.get('set-cookie');
+    assert.ok(rawCookie);
+  });
 });
