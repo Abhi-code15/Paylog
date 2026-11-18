@@ -148,15 +148,15 @@ export function LandingPage() {
               Sign In
             </button>
 
-            {/* Features & Docs Sidebar Trigger (Rightmost Position, Replacing Get Started) */}
+            {/* Features Sidebar Trigger (Rightmost Position, Replacing Get Started) */}
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              aria-label="Features & Docs"
+              aria-label="Features"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-black dark:hover:bg-zinc-200 text-xs sm:text-sm font-bold shadow-sm transition-all"
             >
               <Menu className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-              <span>Features & Docs</span>
+              <span>Features</span>
             </button>
 
           </div>
@@ -494,69 +494,73 @@ export function LandingPage() {
 
         {/* ─── Feature Highlights Section (Fintech Architecture Pillars) ─────── */}
         <div className="mt-12 sm:mt-16 pt-10 border-t border-slate-200/80 dark:border-zinc-800/80">
-          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-900/40 mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Core Financial Engine</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
               Engineered for the Indian Financial Ecosystem
             </h2>
-            <p className="mt-1.5 text-xs sm:text-sm text-slate-600 dark:text-zinc-400">
+            <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed max-w-xl mx-auto">
               Built with relational integrity, integer ledger precision, and zero floating-point discrepancies.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
             
             {/* Feature 1 */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-xs hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.8)] hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
               <div>
-                <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold mb-3.5">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40 flex items-center justify-center font-bold mb-4 shadow-xs">
                   <Receipt className="w-5 h-5" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   0.00% Float Drift
                 </h3>
-                <p className="mt-1.5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
                   Every transaction is stored as an integer quantity in Paise (₹1.00 = 100 paise). Eliminates cumulative IEEE 754 float rounding errors across monthly summaries.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-zinc-400">
+              <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-zinc-400">
                 <span>Integer Precision</span>
                 <span className="font-bold text-blue-600 dark:text-blue-400">100 paise = ₹1</span>
               </div>
             </div>
 
             {/* Feature 2 */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-xs hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.8)] hover:border-emerald-500/30 dark:hover:border-emerald-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
               <div>
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold mb-3.5">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/40 flex items-center justify-center font-bold mb-4 shadow-xs">
                   <Shield className="w-5 h-5" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Anti-Fraud UPI Assistant
                 </h3>
-                <p className="mt-1.5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
-                  Safely opens official UPI apps (GPay, PhonePe, Paytm) without the <code className="text-emerald-500">am=</code> trigger that sets off third-party fraud risk flags.
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
+                  Safely opens official UPI apps (GPay, PhonePe, Paytm) without the <code className="px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 font-mono text-[11px] font-bold">am=</code> trigger that sets off third-party fraud risk flags.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-zinc-400">
+              <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-zinc-400">
                 <span>Risk Policy</span>
                 <span className="font-bold text-emerald-600 dark:text-emerald-400">Pass-Through</span>
               </div>
             </div>
 
             {/* Feature 3 */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div className="p-6 rounded-2xl bg-white dark:bg-[#0c0c0e] border border-slate-200/90 dark:border-zinc-800/90 shadow-xs hover:shadow-md dark:hover:shadow-[0_12px_30px_rgba(0,0,0,0.8)] hover:border-purple-500/30 dark:hover:border-purple-500/30 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
               <div>
-                <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-purple-950/40 text-indigo-600 dark:text-purple-400 flex items-center justify-center font-bold mb-3.5">
+                <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900/40 flex items-center justify-center font-bold mb-4 shadow-xs">
                   <Users className="w-5 h-5" />
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   Transitive Balance Simplification
                 </h3>
-                <p className="mt-1.5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
                   Automatically condenses circular group debts into direct settlements. If A owes B and B owes C, Paylog lets A settle directly with C in one transaction.
                 </p>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-zinc-400">
+              <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-zinc-400">
                 <span>Algorithm</span>
                 <span className="font-bold text-purple-600 dark:text-purple-400">Minimal Flow</span>
               </div>
@@ -579,7 +583,7 @@ export function LandingPage() {
               onClick={() => setSidebarOpen(true)}
               className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
-              Features & Architecture
+              Features
             </button>
             <button
               type="button"
@@ -608,10 +612,10 @@ export function LandingPage() {
               <div className="p-5 border-b border-slate-100 dark:border-zinc-800/80 flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    Features & Documentation
+                    Features
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
-                    Explore capabilities, payment workflow, and architecture
+                    Core capabilities, workflow, and architecture
                   </p>
                 </div>
                 <button
@@ -666,33 +670,76 @@ export function LandingPage() {
                 {/* TAB 1: CAPABILITIES */}
                 {sidebarTab === 'capabilities' && (
                   <div className="space-y-3.5">
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161619] border border-slate-200 dark:border-zinc-800">
-                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
-                        <Receipt className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    {/* Core Architectural Pillars */}
+                    <div className="p-3.5 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/60 dark:border-blue-900/40">
+                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                        <Receipt className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                        <span>0.00% Float Drift</span>
+                      </div>
+                      <p className="mt-1 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Every transaction is stored as an integer quantity in Paise (₹1.00 = 100 paise). Eliminates IEEE 754 float rounding errors across monthly summaries.
+                      </p>
+                      <div className="mt-2 text-[10px] font-mono font-semibold text-blue-600 dark:text-blue-400">
+                        Integer Precision: 100 paise = ₹1
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-900/40">
+                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                        <Shield className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        <span>Anti-Fraud UPI Assistant</span>
+                      </div>
+                      <p className="mt-1 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Safely opens official UPI apps (GPay, PhonePe, Paytm) without the <code className="px-1 py-0.5 rounded bg-emerald-100/60 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 font-mono font-bold">am=</code> trigger that sets off risk policy blocks.
+                      </p>
+                      <div className="mt-2 text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                        Risk Policy: Pass-Through
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-900/40">
+                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                        <Users className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                        <span>Transitive Balance Simplification</span>
+                      </div>
+                      <p className="mt-1 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Condenses circular group debts into direct settlements. If A owes B and B owes C, Paylog lets A settle directly with C in one transaction.
+                      </p>
+                      <div className="mt-2 text-[10px] font-mono font-semibold text-purple-600 dark:text-purple-400">
+                        Algorithm: Minimal Flow
+                      </div>
+                    </div>
+
+                    <div className="h-px bg-slate-200 dark:bg-zinc-800 my-1" />
+
+                    {/* Standard Capabilities */}
+                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#141417] border border-slate-200 dark:border-zinc-800">
+                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                        <Receipt className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
                         <span>Daily Expense Tracking</span>
                       </div>
-                      <p className="mt-1.5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                      <p className="mt-1 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
                         Log cash, card, and UPI transactions. Built-in merchant QR scanner parses payee details, with outcome logging for complete personal records.
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161619] border border-slate-200 dark:border-zinc-800">
-                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
-                        <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#141417] border border-slate-200 dark:border-zinc-800">
+                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                        <Users className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
                         <span>Shared Expense Splitting</span>
                       </div>
-                      <p className="mt-1.5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
-                        Organize group expenses for trips, flatmates, and dinners. Transitive balance cancellation eliminates circular debts so members settle directly.
+                      <p className="mt-1 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Organize group expenses for trips, flatmates, and dinners with deterministic integer-paisa split allocations.
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#161619] border border-slate-200 dark:border-zinc-800">
-                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
-                        <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#141417] border border-slate-200 dark:border-zinc-800">
+                      <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white text-xs">
+                        <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                         <span>Monthly Budgets & Reports</span>
                       </div>
-                      <p className="mt-1.5 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
-                        Set spending caps, inspect category distributions, and monitor your 6-month net cash flow. Download formula-sanitized RFC 4180 CSV tables anytime.
+                      <p className="mt-1 text-xs text-slate-600 dark:text-zinc-400 leading-relaxed">
+                        Set spending caps, inspect category distributions, and monitor net cash flow. Download formula-sanitized RFC 4180 CSV tables anytime.
                       </p>
                     </div>
                   </div>
